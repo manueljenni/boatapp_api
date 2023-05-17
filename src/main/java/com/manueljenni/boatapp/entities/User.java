@@ -33,4 +33,7 @@ public class User {
   @Email
   @JsonIgnore
   private String email;
+
+  @JsonIgnore
+  private String password;
 }
