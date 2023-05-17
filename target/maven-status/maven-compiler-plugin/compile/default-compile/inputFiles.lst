@@ -1,1 +1,14 @@
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/config/WebSecurityConfig.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/services/UserPrincipal.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/rest/responses/UserResponse.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/security/JwtEntryPoint.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/repositories/UserRepo.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/services/CustomUserDetailsService.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/security/JwtTokenProvider.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/services/UserService.java
 /Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/BoatappApplication.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/rest/AuthResource.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/rest/responses/AuthResponse.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/rest/requests/SignUpRequest.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/security/JwtAuthenticationFilter.java
+/Users/manueljenni/Documents/GitHub/boatapp_api/src/main/java/com/manueljenni/boatapp/entities/User.java

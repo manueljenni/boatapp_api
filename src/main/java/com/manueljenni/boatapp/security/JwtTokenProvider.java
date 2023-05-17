@@ -1,7 +1,11 @@
 package com.manueljenni.boatapp.security;
 
+import com.manueljenni.boatapp.entities.User;
+import com.manueljenni.boatapp.repositories.UserRepo;
+import com.manueljenni.boatapp.services.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
@@ -9,10 +13,12 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.Jwts;
 
 @Slf4j
 @Component
@@ -22,6 +28,18 @@ public class JwtTokenProvider {
 
   @Value("${jwt.expirationInYears}")
   private int jwtExpirationInYears;
+
+  @Autowired
+  private UserRepo userRepo;
+
+  public String generateToken(Authentication authentication) {
+    final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    final Optional<User> user = userRepo.findByEmail(userPrincipal.getUsername());
+    if (user.isEmpty()) {
+      throw new RuntimeException("User not found");
+    }
+    return generateToken(user.get().getId());
+  }
 
   public String generateToken(Long userId) {
     final Date expiryDate = Date.from(LocalDateTime.now().plusYears(jwtExpirationInYears)
