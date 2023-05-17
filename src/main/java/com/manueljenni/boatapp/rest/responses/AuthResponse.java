@@ -1,6 +1,6 @@
 package com.manueljenni.boatapp.rest.responses;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,7 @@ import lombok.Builder;
 @AllArgsConstructor
 public class AuthResponse {
   @NotBlank
-  @ApiModelProperty(
-      value = "A Bearer token.",
-      example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImV4cCI6MTYyMjUwNj"
-  )
+  @Schema(description = "Bearer access token")
   public final String accessToken;
 
   @NotBlank

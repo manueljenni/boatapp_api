@@ -35,10 +35,9 @@ public class WebSecurityConfig {
         // Allow anonymous access to these routes:
         .requestMatchers(
             // Swagger
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
+            "/v3/api-docs/**", "/swagger-ui/**",
             // Sign up and login
-            "/authentication/**"
+            "api/v1/auth/**"
         ).permitAll()
         .anyRequest().authenticated();
     return http.build();
