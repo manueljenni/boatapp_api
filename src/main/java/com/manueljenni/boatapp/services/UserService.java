@@ -18,6 +18,10 @@ public class UserService {
   @Autowired
   private UserRepo userRepo;
 
+  public Optional<User> login(SignUpRequest signUpRequest) {
+    return userRepo.findByEmailAndPassword(signUpRequest.getEmail(), signUpRequest.getPassword());
+  }
+
   public Optional<User> createUser(SignUpRequest signUpRequest) {
     return Optional.of(userRepo.save(
         new User(

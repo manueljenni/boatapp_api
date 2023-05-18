@@ -54,4 +54,27 @@ public class AuthResource {
       return new ResponseEntity("Could not create user!", HttpStatus.BAD_REQUEST);
     }
   }
+
+  @PostMapping(
+      value = "/login",
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  public ResponseEntity<AuthResponse> login(@Valid @RequestBody SignUpRequest signUpRequest) {
+    final Optional<User> userOptional = userService.login(signUpRequest);
+    if (userOptional.isPresent()) {
+      // If successful, generate JWT
+      final User user = userOptional.get();
+      final String jwt = tokenProvider.generateToken(user.getId());
+      return ResponseEntity.ok(AuthResponse.builder()
+          .accessToken(jwt)
+          .user(UserResponse.builder()
+              .email(user.getEmail())
+              .build())
+          .build());
+    } else {
+      return new ResponseEntity("{ \"message\": \"Could not login user!\"}",
+          HttpStatus.BAD_REQUEST);
+    }
+  }
 }
