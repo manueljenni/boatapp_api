@@ -1,1 +1,17 @@
+com/manueljenni/boatapp/rest/AuthResource.class
+com/manueljenni/boatapp/config/WebSecurityConfig.class
+com/manueljenni/boatapp/security/JwtTokenProvider.class
+com/manueljenni/boatapp/entities/User.class
+com/manueljenni/boatapp/rest/responses/AuthResponse.class
+com/manueljenni/boatapp/services/CustomUserDetailsService.class
+com/manueljenni/boatapp/rest/responses/AuthResponse$AuthResponseBuilder.class
+com/manueljenni/boatapp/rest/requests/SignUpRequest.class
 com/manueljenni/boatapp/BoatappApplication.class
+com/manueljenni/boatapp/rest/responses/UserResponse.class
+com/manueljenni/boatapp/security/JwtEntryPoint.class
+com/manueljenni/boatapp/repositories/UserRepo.class
+com/manueljenni/boatapp/security/JwtAuthenticationFilter.class
+com/manueljenni/boatapp/rest/responses/UserResponse$UserResponseBuilder.class
+com/manueljenni/boatapp/services/UserPrincipal.class
+com/manueljenni/boatapp/entities/User$UserBuilder.class
+com/manueljenni/boatapp/services/UserService.class

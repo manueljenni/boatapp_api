@@ -33,4 +33,12 @@ public class User {
   @Email
   @JsonIgnore
   private String email;
+
+  @JsonIgnore
+  private String password;
+
+  public User(String email, String password) {
+    this.email = email;
+    this.password = password;
+  }
 }
