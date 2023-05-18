@@ -52,10 +52,10 @@ public class UserService {
   }
 
   public UserResponse getMe(User user) {
-    return convertEntityToResponse(user);
+    return mapEntityToResponse(user);
   }
 
-  private UserResponse convertEntityToResponse(User user) {
+  public UserResponse mapEntityToResponse(User user) {
     return UserResponse.builder()
         .email(user.getEmail())
         .build();
