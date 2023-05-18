@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.manueljenni.boatapp.entities.User;
 import java.util.Collection;
 import java.util.Collections;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Getter
 public class UserPrincipal implements UserDetails {
   private final Long id;
 
@@ -17,6 +19,29 @@ public class UserPrincipal implements UserDetails {
   private final String password;
 
   private final Collection<? extends GrantedAuthority> authorities;
+
+  public UserPrincipal(
+      Long id,
+      String email,
+      String password,
+      Collection<? extends GrantedAuthority> authorities
+  ) {
+    this.id = id;
+    this.email = email;
+    this.password = password;
+    this.authorities = authorities;
+  }
+
+  public static UserPrincipal create(User user) {
+    return new UserPrincipal(
+        user.getId(),
+        user.getEmail(),
+        user.getPassword(),
+        // TODO: Add roles
+        // For now, we don't have any, but those could be added here (admin, user, etc.)
+        Collections.emptyList()
+    );
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,28 +78,5 @@ public class UserPrincipal implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
-  }
-
-  public UserPrincipal(
-      Long id,
-      String email,
-      String password,
-      Collection<? extends GrantedAuthority> authorities
-  ) {
-    this.id = id;
-    this.email = email;
-    this.password = password;
-    this.authorities = authorities;
-  }
-
-  public static UserPrincipal create(User user) {
-    return new UserPrincipal(
-        user.getId(),
-        user.getEmail(),
-        user.getPassword(),
-        // TODO: Add roles
-        // For now, we don't have any, but those could be added here (admin, user, etc.)
-        Collections.emptyList()
-    );
   }
 }
