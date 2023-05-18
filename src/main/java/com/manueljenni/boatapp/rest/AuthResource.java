@@ -4,6 +4,7 @@ import com.manueljenni.boatapp.entities.User;
 import com.manueljenni.boatapp.repositories.UserRepo;
 import com.manueljenni.boatapp.rest.requests.SignUpRequest;
 import com.manueljenni.boatapp.rest.responses.AuthResponse;
+import com.manueljenni.boatapp.rest.responses.ErrorResponse;
 import com.manueljenni.boatapp.rest.responses.UserResponse;
 import com.manueljenni.boatapp.security.JwtTokenProvider;
 import com.manueljenni.boatapp.services.UserService;
@@ -73,8 +74,10 @@ public class AuthResource {
               .build())
           .build());
     } else {
-      return new ResponseEntity("{ \"message\": \"Could not login user!\"}",
-          HttpStatus.BAD_REQUEST);
+      return new ResponseEntity(
+          new ErrorResponse("Could not log in user!"),
+          HttpStatus.UNAUTHORIZED
+      );
     }
   }
 }
