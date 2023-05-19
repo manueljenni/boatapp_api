@@ -1,5 +1,6 @@
 package com.manueljenni.boatapp.security;
 
+import com.manueljenni.boatapp.config.CustomException;
 import com.manueljenni.boatapp.entities.User;
 import com.manueljenni.boatapp.repositories.UserRepo;
 import com.manueljenni.boatapp.services.UserPrincipal;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +38,7 @@ public class JwtTokenProvider {
     final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
     final Optional<User> user = userRepo.findByEmail(userPrincipal.getUsername());
     if (user.isEmpty()) {
-      throw new RuntimeException("User not found");
+      throw new CustomException("User not found", HttpStatus.NOT_FOUND);
     }
     return generateToken(user.get().getId());
   }

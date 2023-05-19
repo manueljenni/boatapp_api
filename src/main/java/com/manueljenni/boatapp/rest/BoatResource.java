@@ -1,5 +1,6 @@
 package com.manueljenni.boatapp.rest;
 
+import com.manueljenni.boatapp.config.CustomException;
 import com.manueljenni.boatapp.entities.Boat;
 import com.manueljenni.boatapp.entities.User;
 import com.manueljenni.boatapp.repositories.BoatRepo;
@@ -59,7 +60,7 @@ public class BoatResource {
     final User user = userService.findUser(principal);
     // Check if the boat exists and belongs to the user
     Boat boat = boatRepo.findByIdAndOwner(id, user)
-        .orElseThrow(() -> new RuntimeException("Boat not found"));
+        .orElseThrow(() -> new CustomException("Boat not found", HttpStatus.NOT_FOUND));
     return new ResponseEntity<>(boatService.updateBoat(boat, updateBoatRequest),
         HttpStatus.OK);
   }
