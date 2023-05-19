@@ -27,6 +27,8 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
     PrintWriter writer = response.getWriter();
+    // TODO: This seems to be returned also in case where the login is not the problem
+    // (e.g. when a field is missing when creating a boat)
     writer.println("{\"message\": \"You need to be logged in.\"}");
     writer.flush();
   }

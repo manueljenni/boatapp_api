@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,18 @@ public class BoatResource {
         HttpStatus.CREATED);
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<Boat> getBoatById(
+      @PathVariable("id") Long id,
+      Principal principal
+  ) {
+    final User user = userService.findUser(principal);
+    // Check if the boat exists and belongs to the user
+    var boat = boatRepo.findByIdAndOwner(id, user)
+        .orElseThrow(() -> new CustomException("Boat not found", HttpStatus.NOT_FOUND));
+    return ResponseEntity.ok(boat);
+  }
+
   @PostMapping("/{id}/update")
   public ResponseEntity<Boat> updateBoat(
       @PathVariable("id") Long id,
@@ -66,6 +79,7 @@ public class BoatResource {
   }
 
   @DeleteMapping("/{id}/delete")
+  @Transactional
   public ResponseEntity<ApiResponse> deleteBoat(@PathVariable("id") Long id, Principal principal) {
     final User user = userService.findUser(principal);
     var rowsDeleted = boatService.deleteBoat(id, user);
