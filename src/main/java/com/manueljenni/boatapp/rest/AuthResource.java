@@ -1,5 +1,6 @@
 package com.manueljenni.boatapp.rest;
 
+import com.manueljenni.boatapp.config.CustomException;
 import com.manueljenni.boatapp.entities.User;
 import com.manueljenni.boatapp.repositories.UserRepo;
 import com.manueljenni.boatapp.rest.requests.SignUpRequest;
@@ -37,7 +38,7 @@ public class AuthResource {
   )
   public ResponseEntity<AuthResponse> signup(@Valid @RequestBody SignUpRequest signUpRequest) {
     if (userRepo.existsByEmail(signUpRequest.getEmail())) {
-      return new ResponseEntity("Email Address already in use!", HttpStatus.BAD_REQUEST);
+      throw new CustomException("Email Address already in use!", HttpStatus.BAD_REQUEST);
     }
     // Create new user
     final Optional<User> userOptional = userService.createUser(signUpRequest);
@@ -52,7 +53,7 @@ public class AuthResource {
               .build())
           .build());
     } else {
-      return new ResponseEntity("Could not create user!", HttpStatus.BAD_REQUEST);
+      throw new CustomException("Could not create user!", HttpStatus.BAD_REQUEST);
     }
   }
 
