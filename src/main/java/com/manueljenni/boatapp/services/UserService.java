@@ -1,5 +1,6 @@
 package com.manueljenni.boatapp.services;
 
+import com.manueljenni.boatapp.config.CustomException;
 import com.manueljenni.boatapp.entities.User;
 import com.manueljenni.boatapp.repositories.UserRepo;
 import com.manueljenni.boatapp.rest.requests.SignUpRequest;
@@ -8,6 +9,7 @@ import java.security.Principal;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,8 @@ public class UserService {
     if (userOptional.isEmpty()) {
       log.warn("User auth not found, user does not exist with id " + userId);
     }
-    return userOptional.orElseThrow(RuntimeException::new);
+    return userOptional.orElseThrow(
+        () -> new CustomException("Failed to log in", HttpStatus.UNAUTHORIZED));
   }
 
   public Long getUserId(Principal principal) {
@@ -45,17 +48,17 @@ public class UserService {
         (UsernamePasswordAuthenticationToken) principal;
     if (token == null) {
       log.warn("User auth not found, principal is null");
-      throw new RuntimeException("User auth not found, principal is null");
+      throw new CustomException("User auth not found, principal is null", HttpStatus.UNAUTHORIZED);
     }
     final UserPrincipal user = (UserPrincipal) token.getPrincipal();
     return user.getId();
   }
 
   public UserResponse getMe(User user) {
-    return convertEntityToResponse(user);
+    return mapEntityToResponse(user);
   }
 
-  private UserResponse convertEntityToResponse(User user) {
+  public UserResponse mapEntityToResponse(User user) {
     return UserResponse.builder()
         .email(user.getEmail())
         .build();
