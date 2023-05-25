@@ -8,8 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.manueljenni.boatapp.BoatappApplication;
 import com.manueljenni.boatapp.entities.User;
+import com.manueljenni.boatapp.repositories.BoatRepo;
 import com.manueljenni.boatapp.repositories.UserRepo;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,14 @@ public class AuthResourceTest {
   private MockMvc mockMvc;
   @Autowired
   private UserRepo userRepo;
+  @Autowired
+  private BoatRepo boatRepo;
+
+  @BeforeEach
+  void setUp() {
+    boatRepo.deleteAll();
+    userRepo.deleteAll();
+  }
 
   @Test
   void test_signup() throws Exception {
@@ -65,7 +75,7 @@ public class AuthResourceTest {
             post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                    "\"email\": \"test_signup@test.com\"," +
+                    "\"email\": \"test_login@test.com\"," +
                     "\"password\": \"test\"" +
                     "}"
                 ))
@@ -87,6 +97,6 @@ public class AuthResourceTest {
                 ))
         .andDo(print())
         .andExpect(status().isUnauthorized())
-        .andExpect(jsonPath("$.message").value("Login failed"));
+        .andExpect(jsonPath("$.message").value("Login failed!"));
   }
 }

@@ -15,6 +15,7 @@ import com.manueljenni.boatapp.entities.Boat;
 import com.manueljenni.boatapp.entities.User;
 import com.manueljenni.boatapp.repositories.BoatRepo;
 import com.manueljenni.boatapp.repositories.UserRepo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,12 @@ public class BoatResourceTest {
   private UserRepo userRepo;
   @Value("${jwt.secret}")
   private String jwtSecret;
+
+  @BeforeEach
+  void setUp() {
+    boatRepo.deleteAll();
+    userRepo.deleteAll();
+  }
 
   @Test
   @Transactional
@@ -66,7 +73,6 @@ public class BoatResourceTest {
         )
         .andDo(print())
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.id").value(1))
         .andExpect(jsonPath("$.name").value("My boat"))
         .andExpect(jsonPath("$.description").value("This is my boat"))
         .andExpect(jsonPath("$.dailyPrice").value(1250))
@@ -87,7 +93,7 @@ public class BoatResourceTest {
   @Test
   void test_getBoatById() throws Exception {
     var user = userRepo.save(User.builder()
-        .email("test_createBoat@test.com")
+        .email("test_getBoatById@test.com")
         .password("testtest")
         .build());
 
@@ -109,7 +115,7 @@ public class BoatResourceTest {
         )
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.id").value(boat.getId()))
         .andExpect(jsonPath("$.name").value("A new boat"))
         .andExpect(jsonPath("$.description").value("Has been saved to the DB"))
         .andExpect(jsonPath("$.dailyPrice").value(999))
@@ -121,7 +127,7 @@ public class BoatResourceTest {
   @Transactional
   void test_updateBoat() throws Exception {
     var user = userRepo.save(User.builder()
-        .email("test_createBoat@test.com")
+        .email("test_updateBoat@test.com")
         .password("testtest")
         .build());
 
@@ -148,7 +154,7 @@ public class BoatResourceTest {
         )
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(1))
+        .andExpect(jsonPath("$.id").value(boat.getId()))
         .andExpect(jsonPath("$.name").value("A new boat"))
         .andExpect(jsonPath("$.description").value("The description has been updated!"))
         .andExpect(jsonPath("$.dailyPrice").value(999))
@@ -167,7 +173,7 @@ public class BoatResourceTest {
   @Transactional
   void test_deleteBoat() throws Exception {
     var user = userRepo.save(User.builder()
-        .email("test_createBoat@test.com")
+        .email("test_deleteBoat@test.com")
         .password("testtest")
         .build());
 
