@@ -19,17 +19,17 @@ public class BoatService {
   @Autowired
   private UserService userService;
 
-  public Boat createBoat(CreateBoatRequest createBoatRequest, User user) {
+  public BoatResponse createBoat(CreateBoatRequest createBoatRequest, User user) {
     final var boat = Boat.builder()
         .name(createBoatRequest.getName())
         .description(createBoatRequest.getDescription())
         .dailyPrice(createBoatRequest.getDailyPrice())
         .owner(user)
         .build();
-    return boatRepo.save(boat);
+    return mapEntityToResponse(boatRepo.save(boat), user);
   }
 
-  public Boat updateBoat(Boat boat, UpdateBoatRequest updateBoatRequest) {
+  public BoatResponse updateBoat(Boat boat, UpdateBoatRequest updateBoatRequest, User user) {
     // Update boat - only set new values if they are present
     if (updateBoatRequest.getName() != null) {
       boat.setName(updateBoatRequest.getName());
@@ -42,7 +42,7 @@ public class BoatService {
     }
 
     // Save the updated boat to the DB
-    return boatRepo.save(boat);
+    return mapEntityToResponse(boatRepo.save(boat), user);
   }
 
   public int deleteBoat(Long boatId, User user) {

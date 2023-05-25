@@ -13,18 +13,21 @@ import com.manueljenni.boatapp.services.UserService;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/boat")
 public class BoatResource {
@@ -43,7 +46,7 @@ public class BoatResource {
       description = "Boat successfully created"
   )
   @PostMapping("/create")
-  public ResponseEntity<Boat> createBoat(
+  public ResponseEntity<BoatResponse> createBoat(
       @Valid @RequestBody CreateBoatRequest createBoatRequest,
       Principal principal
   ) {
@@ -53,7 +56,7 @@ public class BoatResource {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Boat> getBoatById(
+  public ResponseEntity<BoatResponse> getBoatById(
       @PathVariable("id") Long id,
       Principal principal
   ) {
@@ -61,11 +64,11 @@ public class BoatResource {
     // Check if the boat exists and belongs to the user
     var boat = boatRepo.findByIdAndOwner(id, user)
         .orElseThrow(() -> new CustomException("Boat not found", HttpStatus.NOT_FOUND));
-    return ResponseEntity.ok(boat);
+    return ResponseEntity.ok(boatService.mapEntityToResponse(boat, user));
   }
 
-  @PostMapping("/{id}/update")
-  public ResponseEntity<Boat> updateBoat(
+  @PatchMapping("/{id}/update")
+  public ResponseEntity<BoatResponse> updateBoat(
       @PathVariable("id") Long id,
       @Valid @RequestBody UpdateBoatRequest updateBoatRequest,
       Principal principal
@@ -74,7 +77,7 @@ public class BoatResource {
     // Check if the boat exists and belongs to the user
     Boat boat = boatRepo.findByIdAndOwner(id, user)
         .orElseThrow(() -> new CustomException("Boat not found", HttpStatus.NOT_FOUND));
-    return new ResponseEntity<>(boatService.updateBoat(boat, updateBoatRequest),
+    return new ResponseEntity<>(boatService.updateBoat(boat, updateBoatRequest, user),
         HttpStatus.OK);
   }
 
@@ -84,10 +87,11 @@ public class BoatResource {
     final User user = userService.findUser(principal);
     var rowsDeleted = boatService.deleteBoat(id, user);
     if (rowsDeleted > 0) {
-      return ResponseEntity.ok(new ApiResponse(String.format("Boat with id %s deleted", id)));
+      return ResponseEntity.ok(new ApiResponse("Boat successfully deleted"));
     } else {
+      log.error("Boat with id %s could not be deleted");
       return ResponseEntity.internalServerError()
-          .body(new ApiResponse(String.format("Boat with id %s could not be deleted", id)));
+          .body(new ApiResponse(String.format("Boat could not be deleted", id)));
     }
   }
 
