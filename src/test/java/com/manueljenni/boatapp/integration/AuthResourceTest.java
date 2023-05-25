@@ -87,6 +87,6 @@ public class AuthResourceTest {
                 ))
         .andDo(print())
         .andExpect(status().isUnauthorized())
-        .andExpect(jsonPath("$.message").value("Could not log in user!"));
+        .andExpect(jsonPath("$.message").value("Login failed"));
   }
 }

@@ -76,7 +76,7 @@ public class AuthResource {
           .build());
     } else {
       return new ResponseEntity(
-          new ErrorResponse("Could not log in user!"),
+          new ErrorResponse("Login failed!"),
           HttpStatus.UNAUTHORIZED
       );
     }
